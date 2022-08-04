@@ -2,15 +2,25 @@
 
 {% block main %}
 Index page <br>
+
+<div class="storage">
+    {% for item in inventory %}
+    <div class="item" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div>
+    {% endfor %}
+</div>
 Submit new inventory
 <form action="/" method="post">
     <input type="text" id="code" name="code" list="codes" autocomplete="off">
         <datalist id="codes">
-            <option> code option</option>
+            {% for item in inventory %}
+            <option>{{ item.code }} </option>
+            {% endfor %}
         </datalist>
     <input type="text" id="name" name="name" list="names" autocomplete="off">
         <datalist id="names">
-            <option> name option</option>
+            {% for item in inventory %}
+            <option>{{ item.name }} </option>
+            {% endfor %}
         </datalist>
     <input type="submit">
 </form>
