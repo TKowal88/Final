@@ -5,9 +5,10 @@ Index page <br>
 
 <div class="storage">
     {% for item in inventory %}
-    <div class="item" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div>
+    <div class="item" id="{{ item.id }}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div>
     {% endfor %}
 </div>
+<div class="storage"></div>
 Submit new inventory
 <form action="/" method="post">
     <input type="text" id="code" name="code" list="codes" autocomplete="off">
