@@ -1,11 +1,20 @@
-.storage {
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
 
+body {
+    height:100%;
+}
+.storage {
+    font-size: 0;
     border: 1px solid black;
     position: relative;
     height: 75vh;
 }
 
 .item {
+    font-size: 16px;
     border: 0.1px solid black;
     margin-right: -4px;
     position: absolute;
@@ -15,6 +24,9 @@
 .dropzone {
     border: 0.1px solid red;
     display: inline-block;
-    margin-right: -4px;
-    margin-bottom: -4px;
+    
+
+    
+    
+    
 }

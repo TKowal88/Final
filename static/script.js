@@ -1,5 +1,58 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    var gridTarget = interact.snappers.grid({
+        // can be a pair of x and y, left and top,
+        // right and bottom, or width, and height
+        x: 1,
+        y: 1,
+    })
+
+    interact('.dropzone').draggable({
+        
+      modifiers: [
+      interact.modifiers.snap({ targets: [gridTarget] })
+      ,
+      
+        interact.modifiers.restrictRect({
+          restriction: '.storage', 
+          
+          endOnly: true
+        })
+      ],
+        
+  
+
+      
+
+      listeners: {
+        start (event) {
+          console.log(event.type, event.target)
+        },
+        move (event) {
+        const target = event.target;
+        const dataX = target.getAttribute("data-x");
+        const dataY = target.getAttribute("data-y");
+        console.log(dataX, dataY);
+        const initialX = parseFloat(dataX) || 0;
+        const initialY = parseFloat(dataY) || 0;
+
+        const deltaX = event.dx;
+        const deltaY = event.dy;
+
+        const newX = initialX + deltaX;
+        const newY = initialY + deltaY;
+
+        target.style.transform = `translate(${newX}px, ${newY}px)`;
+
+        target.setAttribute("data-x", newX);
+        target.setAttribute("data-y", newY);
+
+        
+            
+        },
+      }
+    })
+    
    
 
  /* var draggableElements = document.getElementsByClassName("item")
