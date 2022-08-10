@@ -1,12 +1,20 @@
 .storage {
+
     border: 1px solid black;
-    
-    height: 75vh
+    position: relative;
+    height: 75vh;
 }
 
 .item {
-    border: 1px solid black;
+    border: 0.1px solid black;
     margin-right: -4px;
     position: absolute;
     display: inline-block;
+}
+
+.dropzone {
+    border: 0.1px solid red;
+    display: inline-block;
+    margin-right: -4px;
+    margin-bottom: -4px;
 }

@@ -4,11 +4,27 @@
 Index page <br>
 
 <div class="storage">
+    
+    
     {% for item in inventory %}
-    <div class="item" id="{{ item.id }}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div>
+    <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"><div class="item" id="{{ item.id }}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div></div>
     {% endfor %}
+    {% for i in range(0, len) %}
+    <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"></div> 
+    {% endfor %}
+    <div class="dropzone" style="width: 13%; height: auto"><div class="item" style="width: 13%; height: auto" draggable="true">EMPTY</div></div>
 </div>
-<div class="storage"></div>
+
+<script>
+    const droppable = new Draggable.Droppable(document.querySelectorAll('.storage'), {
+      draggable: '.item',
+      dropzone: '.dropzone',
+      mirror: {
+        constrainDimensions: true,
+      },
+      plugins: [Draggable.Plugins.ResizeMirror]
+    });
+</script>
 Submit new inventory
 <form action="/" method="post">
     <input type="text" id="code" name="code" list="codes" autocomplete="off">
@@ -25,4 +41,5 @@ Submit new inventory
         </datalist>
     <input type="submit">
 </form>
+
 {% endblock %}
