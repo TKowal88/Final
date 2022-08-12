@@ -1,18 +1,26 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    let storage = document.querySelector(".storage")
+    let rect = storage.getBoundingClientRect()
     var gridTarget = interact.snappers.grid({
         // can be a pair of x and y, left and top,
         // right and bottom, or width, and height
-        x: 1,
-        y: 1,
+        x: 10,
+        y: 5
     })
 
     interact('.dropzone').draggable({
         
       modifiers: [
-      interact.modifiers.snap({ targets: [gridTarget] })
-      ,
-      
+      interact.modifiers.snap({ targets: [gridTarget], 
+        
+        limits: {
+          top: rect.top,
+          left: rect.left,
+          bottom: rect.bottom,
+          height: rect.height
+        }
+      }),
         interact.modifiers.restrictRect({
           restriction: '.storage', 
           
