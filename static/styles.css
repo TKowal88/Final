@@ -1,5 +1,5 @@
 html {
-    box-sizing: border-box;
+   
     height: 100%;
 }
 
@@ -13,17 +13,12 @@ body {
     height: 75vh;
 }
 
-.item {
-    font-size: 16px;
-    border: 0.1px solid black;
-    margin-right: -4px;
-    position: absolute;
-    display: inline-block;
-}
 
 .dropzone {
+    font-size: 12px;
     border: 0.1px solid red;
     display: inline-block;
+    
     
 
     

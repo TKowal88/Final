@@ -7,7 +7,7 @@ Index page <br>
     
     
     {% for item in inventory %}
-    <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"><div class="item" id="{{ item.id }}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%" draggable="true">{{ item.code }}</div></div>
+    <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%">{{ item.id }}</div>
     {% endfor %}
     {% for i in range(0, len) %}
     <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"></div> 
