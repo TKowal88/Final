@@ -15,9 +15,10 @@ body {
 
 
 .dropzone {
-    font-size: 12px;
+    font-size: 16px;
     border: 0.1px solid red;
     display: inline-block;
+    position: absolute;
     
     
 
