@@ -14,7 +14,7 @@ body {
 }
 
 
-.dropzone {
+.item {
     font-size: 16px;
     border: 0.1px solid red;
     display: inline-block;

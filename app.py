@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from cs50 import SQL
 
 app = Flask(__name__)
+
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 db = SQL("sqlite:///warehouse.db")
 
@@ -30,6 +32,12 @@ def index():
         widthpercentage = boxwidth // (storagelength / 100)
         lengthpercentage = boxlength // (storagewidth / 100)
         return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
+
+@app.route("/saved", methods=["POST"])
+def coordinates():
+    data = request.get_json()
+    print(data)
+    return "OK"
 
 @app.route("/inventory")
 def inventory():
