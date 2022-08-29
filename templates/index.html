@@ -7,7 +7,7 @@ Index page <br>
     
     
     {% for item in inventory %}
-    <div class="item" id="{{ item.id}}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%">{{ item.code }}</div>
+    <div class="item" id="{{ item.id}}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%; top:{{ item.y }}%; left:{{ item.x }}%">{{ item.code }}</div>
     {% endfor %}
     <!---- {% for i in range(0, len) %}
     <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"></div> 
@@ -36,7 +36,9 @@ Submit new inventory
 
 <button type ="submit" id="save">Save</button>
 
+
 <div id="saved"></div>
+
 
 
 {% endblock %}

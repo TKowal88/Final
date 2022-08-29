@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 from cs50 import SQL
 
 app = Flask(__name__)
@@ -7,10 +7,13 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 db = SQL("sqlite:///warehouse.db")
 
+app.secret_key = "secret key"
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
         inventory = db.execute("SELECT * FROM stock ORDER BY code")
+        print(inventory)
         boxlength = 50
         storagewidth = 235
         boxwidth = 35
@@ -33,11 +36,24 @@ def index():
         lengthpercentage = boxlength // (storagewidth / 100)
         return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
 
+@app.route("/storage", methods=["POST"])
+def saveStorage():
+    storageSize = request.get_json()
+    print(storageSize)
+    session["storageWidth"] = storageSize["width"]
+    session["storageHeight"] = storageSize["height"]
+    return "ok"
 @app.route("/saved", methods=["POST"])
 def coordinates():
     data = request.get_json()
     print(data)
+    for row in data:
+        left = (row["left"] / session["storageWidth"]) * 100
+        top = (row["top"] / session["storageHeight"]) * 100
+        db.execute("UPDATE stock SET x = ?, y = ? WHERE id = ?", left, top, row["id"])
     return "OK"
+
+
 
 @app.route("/inventory")
 def inventory():
