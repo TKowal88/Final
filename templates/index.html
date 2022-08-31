@@ -2,16 +2,23 @@
 
 {% block main %}
 Index page <br>
+Enter storage size:
+<form action="/addStorage" method="POST" name="storageSize" id="storageSize">
+    <input type="number" id="storageWidth" name="storageWidth" placeholder="Width">
+    <input type="number" id="storageLength" name="storageLength" placeholder="Length">
+    <input type="number" id="storageHeight" name="storageHeight" placeholder="Height">
+    <input type="submit" id="storageSubmit">
+</form>
 
 <div class="storage">
     
     
-    {% for item in inventory %}
-    <div class="item" id="{{ item.id}}" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%; top:{{ item.y }}%; left:{{ item.x }}%">{{ item.code }}</div>
+    {% for i in range(0, inventory|length) %}
+    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}</div>
     {% endfor %}
-    <!---- {% for i in range(0, len) %}
-    <div class="dropzone" style="width:{{ lengthpercentage }}%; height:{{ widthpercentage }}%"></div> 
-    {% endfor %}
+    <!----
+    <div class="dropzone" style="width:; height:"></div> 
+    {}
     <div class="dropzone" style="width: 13%; height: auto"><div class="item" style="width: 13%; height: auto" draggable="true">EMPTY</div></div> -->
 </div>
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect
 from cs50 import SQL
 
 app = Flask(__name__)
@@ -14,27 +14,21 @@ def index():
     if request.method == "GET":
         inventory = db.execute("SELECT * FROM stock ORDER BY code")
         print(inventory)
-        boxlength = 50
-        storagewidth = 235
-        boxwidth = 35
-        storagelength = 590
-        widthpercentage = boxwidth / (storagelength / 100)
-        lengthpercentage = boxlength / (storagewidth / 100)
-        emptyspaces = int((100 // lengthpercentage) * (100 // widthpercentage) - len(inventory))
-        
-        return render_template("index.html", inventory=inventory, len = emptyspaces, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
+        storage = db.execute("SELECT * FROM storage WHERE rowid=1")
+        print(storage)
+        widthpercentage = []
+        lengthpercentage = []
+        for item in inventory:
+            widthpercentage.append(round(item["boxwidth"] / (storage[0]["length"] / 100)))
+            lengthpercentage.append(round(item["boxlength"] / (storage[0]["width"] / 100)))
+        print(widthpercentage, lengthpercentage)
+        # emptyspaces = int((100 // lengthpercentage) * (100 // widthpercentage) - len(inventory))        
+        return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
     else:
         code = request.form.get("code")
         name = request.form.get("name")
         db.execute("INSERT INTO stock (code, name) VALUES (?, ?)", code, name)
-        inventory = db.execute("SELECT * FROM stock ORDER BY code")
-        boxlength = 50
-        storagewidth = 235
-        storagelength = 590
-        boxwidth = 35
-        widthpercentage = boxwidth // (storagelength / 100)
-        lengthpercentage = boxlength // (storagewidth / 100)
-        return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
+        return redirect("/")
 
 @app.route("/storage", methods=["POST"])
 def saveStorage():
@@ -43,17 +37,24 @@ def saveStorage():
     session["storageWidth"] = storageSize["width"]
     session["storageHeight"] = storageSize["height"]
     return "ok"
+
 @app.route("/saved", methods=["POST"])
 def coordinates():
     data = request.get_json()
     print(data)
     for row in data:
-        left = (row["left"] / session["storageWidth"]) * 100
-        top = (row["top"] / session["storageHeight"]) * 100
+        left = round((row["left"] / session["storageWidth"]) * 100)
+        top = round((row["top"] / session["storageHeight"]) * 100)
         db.execute("UPDATE stock SET x = ?, y = ? WHERE id = ?", left, top, row["id"])
-    return "OK"
+    return "ok"
 
-
+@app.route("/addStorage", methods=["POST"])
+def addStorage():
+    width = request.form.get("storageWidth")
+    length = request.form.get("storageLength")
+    height = request.form.get("storageHeight")
+    db.execute("UPDATE storage SET width = ?, length = ?, height = ? WHERE rowid = 1", width, length, height)
+    return redirect("/")
 
 @app.route("/inventory")
 def inventory():
