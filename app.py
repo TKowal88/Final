@@ -27,7 +27,11 @@ def index():
     else:
         code = request.form.get("code")
         name = request.form.get("name")
-        db.execute("INSERT INTO stock (code, name) VALUES (?, ?)", code, name)
+        boxwidth = request.form.get("boxwidth")
+        boxlength = request.form.get("boxlength")
+        boxheight = request.form.get("boxheight")
+        db.execute("INSERT INTO stock (code, name, boxwidth, boxlength, boxheight) VALUES (?, ?, ?, ?, ?)", code, name, 
+        boxwidth, boxlength, boxheight)
         return redirect("/")
 
 @app.route("/storage", methods=["POST"])

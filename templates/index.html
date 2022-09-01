@@ -9,12 +9,12 @@ Enter storage size:
     <input type="number" id="storageHeight" name="storageHeight" placeholder="Height">
     <input type="submit" id="storageSubmit">
 </form>
-
+<input type="checkbox" id="editLayout" name="editLayout"><label for="editLayout">Edit Layout</label> 
 <div class="storage">
     
     
     {% for i in range(0, inventory|length) %}
-    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}</div>
+    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}<div class="details" id="D{{ inventory[i].id}}">{{ inventory[i].name }}</div></div>
     {% endfor %}
     <!----
     <div class="dropzone" style="width:; height:"></div> 
@@ -26,18 +26,21 @@ Enter storage size:
 </script>
 Submit new inventory
 <form action="/" method="post">
-    <input type="text" id="code" name="code" list="codes" autocomplete="off">
+    <input type="text" id="code" name="code" list="codes" autocomplete="off" placeholder="code">
         <datalist id="codes">
             {% for item in inventory %}
             <option>{{ item.code }} </option>
             {% endfor %}
         </datalist>
-    <input type="text" id="name" name="name" list="names" autocomplete="off">
+    <input type="text" id="name" name="name" list="names" autocomplete="off" placeholder="name">
         <datalist id="names">
             {% for item in inventory %}
             <option>{{ item.name }} </option>
             {% endfor %}
         </datalist>
+    <input type="number" id="boxwidth" name="boxwidth" placeholder="width">
+    <input type="number" id="boxlength" name="boxlength" placeholder="length">
+    <input type="number" id="boxheight" name="boxheight" placeholder="height">    
     <input type="submit">
 </form>
 

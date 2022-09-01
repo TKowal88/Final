@@ -17,11 +17,17 @@ body {
     font-size: 16px;
     border: 0.1px solid red;
     display: inline-block;
-    position: absolute;
-    
-    
-
-    
-    
-    
+    position: absolute; 
+}
+.details {
+    border: 0.1px solid blue;
+    background-color: white;
+    width: 50vh;
+    height: 70vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: none;
 }
