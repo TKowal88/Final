@@ -13,7 +13,6 @@ app.secret_key = "secret key"
 def index():
     if request.method == "GET":
         inventory = db.execute("SELECT * FROM stock ORDER BY code")
-        print(inventory)
         storage = db.execute("SELECT * FROM storage WHERE rowid=1")
         print(storage)
         widthpercentage = []
@@ -21,9 +20,8 @@ def index():
         for item in inventory:
             widthpercentage.append(round(item["boxwidth"] / (storage[0]["length"] / 100)))
             lengthpercentage.append(round(item["boxlength"] / (storage[0]["width"] / 100)))
-        print(widthpercentage, lengthpercentage)
         # emptyspaces = int((100 // lengthpercentage) * (100 // widthpercentage) - len(inventory))        
-        return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage)
+        return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage, storage=storage)
     else:
         code = request.form.get("code")
         name = request.form.get("name")
@@ -37,15 +35,13 @@ def index():
 @app.route("/storage", methods=["POST"])
 def saveStorage():
     storageSize = request.get_json()
-    print(storageSize)
     session["storageWidth"] = storageSize["width"]
     session["storageHeight"] = storageSize["height"]
     return "ok"
 
 @app.route("/saved", methods=["POST"])
 def coordinates():
-    data = request.get_json()
-    print(data)
+    data = request.get_json() 
     for row in data:
         left = round((row["left"] / session["storageWidth"]) * 100)
         top = round((row["top"] / session["storageHeight"]) * 100)
@@ -59,6 +55,22 @@ def addStorage():
     height = request.form.get("storageHeight")
     db.execute("UPDATE storage SET width = ?, length = ?, height = ? WHERE rowid = 1", width, length, height)
     return redirect("/")
+
+@app.route("/removeItem", methods=["POST"])
+def removeItem():
+    id = request.form.get("id")
+    db.execute("DELETE FROM stock WHERE id = ?", id)
+    return redirect("/")
+
+@app.route("/rotateitem", methods=["POST"])
+def rotateItem():
+    id = request.form.get("id")
+    newboxwidth = db.execute("SELECT boxlength FROM stock WHERE id = ?", id)
+    newboxlength = db.execute("SELECT boxwidth FROM stock WHERE id = ?", id)
+    print(newboxwidth, newboxlength)
+    db.execute("UPDATE stock SET boxwidth = ?, boxlength = ? WHERE id = ?", newboxwidth[0]["boxlength"], newboxlength[0]["boxwidth"], id)
+    return redirect("/")
+
 
 @app.route("/inventory")
 def inventory():

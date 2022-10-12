@@ -3,6 +3,7 @@ addEventListener("DOMContentLoaded", function () {
   let edit = document.querySelector("#editLayout")
   let items = document.querySelectorAll(".item")
   let details = document.querySelectorAll(".details")
+  
 
   function displayDetails(e) {   
     console.log(e.currentTarget.attributes.index.value)
@@ -85,5 +86,8 @@ if (response.status === 200) {
 .then(() => {window.location.reload()});
 })
 })
+})
+this.window.addEventListener("resize" , event => {
+  this.location.reload();
 })
 })

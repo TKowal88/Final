@@ -9,12 +9,21 @@ Enter storage size:
     <input type="number" id="storageHeight" name="storageHeight" placeholder="Height">
     <input type="submit" id="storageSubmit">
 </form>
+<div> Storage dimensions: Width = {{ storage[0].width }} cm, Length = {{ storage[0].length }} cm, Height = {{ storage[0].height }} cm</div>
 <input type="checkbox" id="editLayout" name="editLayout"><label for="editLayout">Edit Layout</label> 
 <div class="storage">
     
     
     {% for i in range(0, inventory|length) %}
-    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}<div class="details" id="D{{ inventory[i].id}}">{{ inventory[i].name }}</div></div>
+    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}
+        <div class="details" id="D{{ inventory[i].id}}">{{ inventory[i].name }}
+            <form action="/removeItem" method="post"><input type="text" style="display:none" name="id" value="{{ inventory[i].id }}">
+                <input class="removeitem" type="submit" value="Delete"> </form>
+            Box dimensions: Length = {{ inventory[i].boxlength }} cm, Width = {{ inventory[i].boxwidth }} cm, Height = {{ inventory[i].boxheight }} cm 
+            <form action="/rotateitem" method="post"><input type="text" style="display:none" value="{{ inventory[i].id }}" name="id"> <input type="submit" name="rotate" value="Rotate"> 
+            </form>
+        </div>
+    </div>
     {% endfor %}
     <!----
     <div class="dropzone" style="width:; height:"></div> 
