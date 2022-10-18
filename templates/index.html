@@ -2,6 +2,7 @@
 
 {% block main %}
 Index page <br>
+<a href="/stock">Inventory</a> <br>
 Enter storage size:
 <form action="/addStorage" method="POST" name="storageSize" id="storageSize">
     <input type="number" id="storageWidth" name="storageWidth" placeholder="Width">
@@ -14,46 +15,46 @@ Enter storage size:
 <div class="storage">
     
     
-    {% for i in range(0, inventory|length) %}
-    <div class="item" id="{{ inventory[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ inventory[i].y }}%; left:{{ inventory[i].x }}%">{{ inventory[i].code }}
-        <div class="details" id="D{{ inventory[i].id}}">{{ inventory[i].name }}
-            <form action="/removeItem" method="post"><input type="text" style="display:none" name="id" value="{{ inventory[i].id }}">
-                <input class="removeitem" type="submit" value="Delete"> </form>
-            Box dimensions: Length = {{ inventory[i].boxlength }} cm, Width = {{ inventory[i].boxwidth }} cm, Height = {{ inventory[i].boxheight }} cm 
-            <form action="/rotateitem" method="post"><input type="text" style="display:none" value="{{ inventory[i].id }}" name="id"> <input type="submit" name="rotate" value="Rotate"> 
+    {% for i in range(0, stacks|length) %}
+    <div class="item" id="{{ stacks[i].id}}" style="width:{{ lengthpercentage[i] }}%; height:{{ widthpercentage[i] }}%; top:{{ stacks[i].y }}%; left:{{ stacks[i].x }}%">{{ stacks[i].id }}
+        <div class="details" id="D{{ stacks[i].id }}">{{ stacks[i].id }}
+            <form action="/removestack" method="post"><input type="text" style="display:none" name="id" value="{{ stacks[i].id }}">
+                <input class="removestack" type="submit" value="Delete Stack"> </form>
+            Stack dimensions: Length = {{ stacks[i].stacklength }} cm, Width = {{ stacks[i].stackwidth }} cm, Height = {{ stacks[i].stackheight }} cm 
+            <form action="/rotatestack" method="post"><input type="text" style="display:none" value="{{ stacks[i].id }}" name="id"> <input type="submit" name="rotatestack" value="Rotate Stack"> 
+                
             </form>
+            <div class="stackview">
+                HELLO
+            </div>
         </div>
     </div>
     {% endfor %}
-    <!----
-    <div class="dropzone" style="width:; height:"></div> 
-    {}
-    <div class="dropzone" style="width: 13%; height: auto"><div class="item" style="width: 13%; height: auto" draggable="true">EMPTY</div></div> -->
+    
 </div>
 
 <script>
 </script>
-Submit new inventory
+Add new stack
 <form action="/" method="post">
-    <input type="text" id="code" name="code" list="codes" autocomplete="off" placeholder="code">
-        <datalist id="codes">
-            {% for item in inventory %}
-            <option>{{ item.code }} </option>
-            {% endfor %}
-        </datalist>
-    <input type="text" id="name" name="name" list="names" autocomplete="off" placeholder="name">
-        <datalist id="names">
-            {% for item in inventory %}
-            <option>{{ item.name }} </option>
-            {% endfor %}
-        </datalist>
-    <input type="number" id="boxwidth" name="boxwidth" placeholder="width">
-    <input type="number" id="boxlength" name="boxlength" placeholder="length">
-    <input type="number" id="boxheight" name="boxheight" placeholder="height">    
+    
+    
+    <input type="number" id="stackwidth" name="stackwidth" placeholder="width">
+    <input type="number" id="stacklength" name="stacklength" placeholder="length"> 
+    <input type="submit">
+</form>
+Add new stock
+<form action="/addstock" method="post">
+    <input type="text" id="code" name="code" placeholder="Code">
+    <input type="text" id="name" name="name" placeholder="Name">
+    <input type="number" id="boxwidth" name="boxwidth" placeholder="Width">
+    <input type="number" id="boxlength" name="boxlength" placeholder="Length"> 
+    <input type="number" id="boxheight" name="boxheight" placeholder="Height">
+    <input type="number" id="boxcount" name="boxcount" placeholder="Count">
     <input type="submit">
 </form>
 
-<button type ="submit" id="save">Save</button>
+<button type ="submit" id="save">Save layout</button>
 
 
 <div id="saved"></div>

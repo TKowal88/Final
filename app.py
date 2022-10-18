@@ -12,24 +12,22 @@ app.secret_key = "secret key"
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        inventory = db.execute("SELECT * FROM stock ORDER BY code")
+        stacks = db.execute("SELECT * FROM stacks ORDER BY id")
         storage = db.execute("SELECT * FROM storage WHERE rowid=1")
-        print(storage)
         widthpercentage = []
         lengthpercentage = []
-        for item in inventory:
-            widthpercentage.append(round(item["boxwidth"] / (storage[0]["length"] / 100)))
-            lengthpercentage.append(round(item["boxlength"] / (storage[0]["width"] / 100)))
+        for item in stacks:
+            widthpercentage.append(round(item["stackwidth"] / (storage[0]["length"] / 100)))
+            lengthpercentage.append(round(item["stacklength"] / (storage[0]["width"] / 100)))
         # emptyspaces = int((100 // lengthpercentage) * (100 // widthpercentage) - len(inventory))        
-        return render_template("index.html", inventory=inventory, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage, storage=storage)
+        return render_template("index.html", stacks=stacks, lengthpercentage=lengthpercentage, widthpercentage=widthpercentage, storage=storage)
     else:
-        code = request.form.get("code")
-        name = request.form.get("name")
-        boxwidth = request.form.get("boxwidth")
-        boxlength = request.form.get("boxlength")
-        boxheight = request.form.get("boxheight")
-        db.execute("INSERT INTO stock (code, name, boxwidth, boxlength, boxheight) VALUES (?, ?, ?, ?, ?)", code, name, 
-        boxwidth, boxlength, boxheight)
+        
+        stackwidth = request.form.get("stackwidth")
+        stacklength = request.form.get("stacklength")
+        storage = db.execute("SELECT * FROM storage WHERE rowid=1")
+        stackheight = storage[0]["height"]
+        db.execute("INSERT INTO stacks (stackwidth, stacklength, stackheight) VALUES (?, ?, ?)" , stackwidth, stacklength, stackheight)
         return redirect("/")
 
 @app.route("/storage", methods=["POST"])
@@ -45,7 +43,7 @@ def coordinates():
     for row in data:
         left = round((row["left"] / session["storageWidth"]) * 100)
         top = round((row["top"] / session["storageHeight"]) * 100)
-        db.execute("UPDATE stock SET x = ?, y = ? WHERE id = ?", left, top, row["id"])
+        db.execute("UPDATE stacks SET x = ?, y = ? WHERE id = ?", left, top, row["id"])
     return "ok"
 
 @app.route("/addStorage", methods=["POST"])
@@ -56,23 +54,33 @@ def addStorage():
     db.execute("UPDATE storage SET width = ?, length = ?, height = ? WHERE rowid = 1", width, length, height)
     return redirect("/")
 
-@app.route("/removeItem", methods=["POST"])
+@app.route("/removestack", methods=["POST"])
 def removeItem():
     id = request.form.get("id")
-    db.execute("DELETE FROM stock WHERE id = ?", id)
+    db.execute("DELETE FROM stacks WHERE id = ?", id)
     return redirect("/")
 
-@app.route("/rotateitem", methods=["POST"])
+@app.route("/rotatestack", methods=["POST"])
 def rotateItem():
     id = request.form.get("id")
-    newboxwidth = db.execute("SELECT boxlength FROM stock WHERE id = ?", id)
-    newboxlength = db.execute("SELECT boxwidth FROM stock WHERE id = ?", id)
-    print(newboxwidth, newboxlength)
-    db.execute("UPDATE stock SET boxwidth = ?, boxlength = ? WHERE id = ?", newboxwidth[0]["boxlength"], newboxlength[0]["boxwidth"], id)
+    newstackwidth = db.execute("SELECT stacklength FROM stacks WHERE id = ?", id)
+    newstacklength = db.execute("SELECT stackwidth FROM stacks WHERE id = ?", id)
+    db.execute("UPDATE stacks SET stackwidth = ?, stacklength = ? WHERE id = ?", newstackwidth[0]["stacklength"], newstacklength[0]["stackwidth"], id)
+    return redirect("/")
+
+@app.route("/addstock", methods=["POST"])
+def addStock():
+    code = request.form.get("code")
+    name = request.form.get("name")
+    boxwidth = request.form.get("boxwidth")
+    boxlength = request.form.get("boxlength")
+    boxheight = request.form.get("boxheight")
+    boxcount = request.form.get("boxcount")
+    db.execute("INSERT INTO stock (code, name, boxlength, boxwidth, boxheight) VALUES (?, ?, ?, ?, ?)", code, name, boxlength, boxwidth, boxheight)
     return redirect("/")
 
 
-@app.route("/inventory")
+@app.route("/stock")
 def inventory():
-    inventory = db.execute("SELECT * FROM stock ORDER BY code")
+    inventory = db.execute("SELECT * FROM stock ORDER BY stock_id")
     return render_template("inventory.html", inventory=inventory)

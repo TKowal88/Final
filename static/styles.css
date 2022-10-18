@@ -31,3 +31,8 @@ body {
     z-index: 100;
     display: none;
 }
+
+.stackview {
+    border: 1px solid black;
+    
+}
