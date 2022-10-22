@@ -5,12 +5,20 @@ Index page <br>
 <a href="/stock">Inventory</a> <br>
 Enter storage size:
 <form action="/addStorage" method="POST" name="storageSize" id="storageSize">
+    <input type="text" id="storageName" name="storageName" placeholder="Name">
     <input type="number" id="storageWidth" name="storageWidth" placeholder="Width">
     <input type="number" id="storageLength" name="storageLength" placeholder="Length">
     <input type="number" id="storageHeight" name="storageHeight" placeholder="Height">
     <input type="submit" id="storageSubmit">
 </form>
-<div> Storage dimensions: Width = {{ storage[0].width }} cm, Length = {{ storage[0].length }} cm, Height = {{ storage[0].height }} cm</div>
+<div> Storage name: {{ storage[0].name }} <br>Storage dimensions: Width = {{ storage[0].width }} cm, Length = {{ storage[0].length }} cm, Height = {{ storage[0].height }} cm</div>
+<div> Select storage <form action="/selectstorage" method="post"><input list="storagename" name="storagename">
+    <datalist name="storagename" id="storagename">
+        {% for storage in storages %}
+        <option value="{{ storage.name }}">
+        </option>
+        {% endfor %} 
+    </datalist> <input type="submit"></form></div>
 <input type="checkbox" id="editLayout" name="editLayout"><label for="editLayout">Edit Layout</label> 
 <div class="storage">
     
@@ -24,8 +32,14 @@ Enter storage size:
             <form action="/rotatestack" method="post"><input type="text" style="display:none" value="{{ stacks[i].id }}" name="id"> <input type="submit" name="rotatestack" value="Rotate Stack"> 
                 
             </form>
-            <div class="stackview">
-                HELLO
+            <div class="stackwrap">
+                {% for item in stock|reverse %}
+                {% if item.stack_id == stacks[i].id %}
+                <div class="stackview">
+                    {{ item.name }} {{ item.stock_id }}
+                </div>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>

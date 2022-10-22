@@ -2,18 +2,33 @@
 
 {% block main %}
 Current inventory
+<a href="/">Home</a>
+<form action="/updatestacks" method="post" >
 <table>
     <tr>
         <th>ID</th>
         <th>Code</th>
         <th>Name</th>
+        <th>Stack ID</th>
     </tr>
     {% for item in inventory %}
     <tr>
-        <td>{{ item["id"] }}</td>
+        <td>{{ item["stock_id"] }}</td>
         <td>{{ item["code"] }}</td>
         <td>{{ item["name"] }}</td>
+        <td><input list="stacks" id="{{ item.stock_id }}" name="{{ item.stock_id }}" placeholder="{{ item.stack_id }}"><input type="text" style="display:none" name="{{ item.stock_id }}" value="{{ item.stock_id }}"></td>
+        <datalist id="stacks">
+            {% for item in stacks %}
+            <option value="{{ item.id }}">
+            {% endfor %}
+        </datalist>
+        
+        
     </tr>
     {% endfor %}
+    
+
 </table>
+<input type="submit">
+</form>
 {% endblock %}
